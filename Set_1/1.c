@@ -13,10 +13,10 @@ char* start_string="49276d206b696c6c696e6720796f757220627261696e206c"
 // Test Value
 char* test_string="0123456789abcdef";
 
-/* Input : A string of hex characters
- * Output: A pointer to the data that the string was decoded into
- *
- * Should allocate memory based on how long the hex string is
+/*
+ * Given a hex string (input_string) and an output location (output_hex),
+ * This function will take a hexidecimal encoded string, decode the string,
+ * and place it into memory
  */
 int decode_hex(unsigned char* output_hex, char* input_string) {
     // Length of hex string must be even
