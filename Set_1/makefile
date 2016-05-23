@@ -5,24 +5,35 @@ CC=gcc
 OPENSSL_LIB=/usr/local/opt/openssl/lib
 OPENSSL_INC=/usr/local/opt/openssl/include
 
+MY_INC=../inc
+MY_SRC=../src
+
 # compiler flags
 # -g 	include debugging information
 # -Wall throw all (maybe all) compiler warnings 
-CFLAGS=-g -Wall -I$(OPENSSL_INC)
-LDFLAGS=-L$(OPENSSL_LIB) -lcrypto
+CFLAGS=-g -Wall -Werror -I$(MY_INC) -I$(OPENSSL_INC)
+LDFLAGS=-lcrypto
 
-# Executables are just the problem number
-EXECS=1 2
 
 RM=rm -rf
 
+EXECS=1 2
+OBJECTS=decode_encode.o
+# Executables are just the problem number
 all: $(EXECS)
 
-1: 1.c
-	$(CC) $(CFLAGS) $(LDFLAGS) $< -o $@
+######## MAIN EXECUTABLES ########
+1: 1.c $(OBJECTS)
+	$(CC) $(CFLAGS) $(LDFLAGS) $^ -o $@
 
-2: 2.c
-	$(CC) $(CFLAGS) $< -o $@
+2: 2.c $(OBJECTS)
+	$(CC) $(CFLAGS) $(LDFLAGS) $^ -o $@
+
+######## OBJECTS ########
+%.o: $(MY_SRC)/%.c $(MY_INC)/%.h
+	$(CC) -c $< $(CFLAGS) -o $@
+
+######## CLEANING ########
 clean:
 	$(RM) *.o *.dSYM $(EXECS)
 
