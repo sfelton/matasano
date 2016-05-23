@@ -4,7 +4,7 @@ The matasano crypto challenges found at [cryptopals.com](cryptopals.com)
 ## Set 1: Basics
 | #  | Title                        | Completed |
 |----|------------------------------|-----------|
-| 1  | Convert hex to base64        |           | 
+| 1  | Convert hex to base64        |  5/23/16  | 
 | 2  | Fixed XOR                    |           |
 | 3  | Single-byte XOR cipher       |           |
 | 4  | Detect single-character XOR  |           |

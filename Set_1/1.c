@@ -2,6 +2,10 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <openssl/bio.h>
+#include <openssl/evp.h>
+#include <openssl/buffer.h>
+
 // Final Answer
 char* final_string="SSdtIGtpbGxpbmcgeW91ciBicmFpbiBs"
                    "aWtlIGEgcG9pc29ub3VzIG11c2hyb29t";
@@ -34,16 +38,50 @@ int decode_hex(unsigned char* output_hex, char* input_string) {
     return byte_count;
 }
 
+char* encode_base64(unsigned char* data, size_t length) {
+    BIO *bmem, *b64;
+    BUF_MEM *bufmem;
+
+    b64 = BIO_new(BIO_f_base64());
+    bmem = BIO_new(BIO_s_mem());
+
+    b64 = BIO_push(b64, bmem);
+
+    BIO_set_flags(b64, BIO_FLAGS_BASE64_NO_NL);
+    BIO_write(b64, data, length);
+    BIO_flush(b64);
+    BIO_get_mem_ptr(b64, &bufmem);
+    BIO_set_close(b64, BIO_NOCLOSE);
+    BIO_free_all(b64);
+
+    return bufmem->data;
+
+}
+
 
 int main(int argc, char* argv[]) {
     printf("Starting Value: %s\n", start_string);
 
-    unsigned char* decoded_hex = malloc(strlen(start_string)/2);
+    //Decode hex string and place in memory
+    size_t data_length = strlen(start_string)/2;
+    unsigned char* decoded_hex = malloc(data_length);
+    printf("[ ] Decoding hex string...");
     if (decode_hex(decoded_hex, start_string) <= 0) {
+        printf("\r[X\n");
         printf("ERROR main: couldn't decode hex string\n");
         free(decoded_hex);
         return 1;
     }
+    printf("\r[*]\n");
+
+    //Encode memory into a base64 string
+    printf("[ ] Encoding to base64...");
+    char* encoded_string = encode_base64(decoded_hex, data_length);
+
+    printf("\r[*]\n");
     free(decoded_hex);
+
+    printf("Final ans: %s\n", encoded_string);
+    printf("Should be: %s\n", final_string);
     return 0;
 }
