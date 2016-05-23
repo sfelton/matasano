@@ -1,4 +1,5 @@
 #include "decode_encode.h"
+#include "crypto_lib.h"
 
 // Starting Values
 char* LHS="1c0111001f010100061a024b53535009181c";
@@ -23,12 +24,7 @@ int main(int argc, char* argv[]) {
     }
 
     unsigned char* ans_data = malloc(LHS_size);
-    unsigned char* curr_ptr = ans_data;
-    for (unsigned int i = 0; i < LHS_size; ++i){
-        *curr_ptr = *(LHS_data+i)^*(RHS_data+i);
-        curr_ptr++;
-    }
-
+    xor(ans_data, LHS_data, RHS_data, LHS_size);
     char* ans = encode_hex(ans_data, LHS_size);
 
     printf("    %s\n", LHS);

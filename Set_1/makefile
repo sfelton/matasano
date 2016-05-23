@@ -18,7 +18,8 @@ LDFLAGS=-lcrypto
 RM=rm -rf
 
 EXECS=1 2
-OBJECTS=decode_encode.o
+OBJECTS=crypto_lib.o decode_encode.o
+
 # Executables are just the problem number
 all: $(EXECS)
 
