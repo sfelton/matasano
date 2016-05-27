@@ -24,7 +24,7 @@ int main(int argc, char* argv[]) {
     }
 
     unsigned char* ans_data = malloc(LHS_size);
-    xor(ans_data, LHS_data, RHS_data, LHS_size);
+    repeated_xor(ans_data, LHS_data, LHS_size, RHS_data, LHS_size);
     char* ans = encode_hex(ans_data, LHS_size);
 
     printf("    %s\n", LHS);

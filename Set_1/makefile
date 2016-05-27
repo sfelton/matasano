@@ -11,13 +11,13 @@ MY_SRC=../src
 # compiler flags
 # -g 	include debugging information
 # -Wall throw all (maybe all) compiler warnings 
-CFLAGS=-g -Wall -Werror -I$(MY_INC) -I$(OPENSSL_INC)
+CFLAGS=-g -Wall Werror -I$(MY_INC) -I$(OPENSSL_INC)
 LDFLAGS=-lcrypto
 
 
 RM=rm -rf
 
-EXECS=1 2
+EXECS=1 2 3
 OBJECTS=crypto_lib.o decode_encode.o
 
 # Executables are just the problem number
@@ -28,6 +28,9 @@ all: $(EXECS)
 	$(CC) $(CFLAGS) $(LDFLAGS) $^ -o $@
 
 2: 2.c $(OBJECTS)
+	$(CC) $(CFLAGS) $(LDFLAGS) $^ -o $@
+
+3: 3.c $(OBJECTS)
 	$(CC) $(CFLAGS) $(LDFLAGS) $^ -o $@
 
 ######## OBJECTS ########
