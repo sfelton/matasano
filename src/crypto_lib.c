@@ -1,5 +1,12 @@
 #include "crypto_lib.h"
 
+float english_letter_frequency[26] =
+{ 0.08167, 0.01492, 0.02782, 0.04253, 0.12702, 0.02228, 0.02015,  // A-G
+  0.06094, 0.06966, 0.00153, 0.00772, 0.04025, 0.02406, 0.06749,  // H-N
+  0.07507, 0.01929, 0.00095, 0.05987, 0.06327, 0.09056, 0.02758,  // O-U
+  0.00978, 0.02360, 0.00150, 0.01974, 0.00074, };                 // V-Z
+
+
 /*
  * XOR METHODS
  */
@@ -53,4 +60,32 @@ int repeated_xor( unsigned char* ANS,
 /*
  * FREQUENCY ANALYSIS
  */
+
+//http://crypto.stackexchange.com/questions/30209/developing-algorithm-for-detecting-plain-text-via-frequency-analysis
+float score_letter_frequency(char* string){
+    //Get a count of all the letters
+    unsigned int num_letters = 0;
+    unsigned int letter_count[26] = {0};
+    for (unsigned int i=0; i < strlen(string); ++i){
+        char c = string[i];
+        if (c >= 'a' && c <= 'z') {
+            letter_count[c-97]++;
+            num_letters++;
+        }
+        else if (c >= 'A' && c <= 'Z') {
+            letter_count[c-65]++;
+            num_letters++;
+        }
+    }
+
+    //Do chi squared test to generate score
+    float chi2 = 0;
+    for (unsigned int i = 0; i < 26; ++i) {
+        float expected = english_letter_frequency[i]*strlen(string);
+        float difference = expected-letter_count[i];
+        if (expected != 0) chi2 += (float)((difference*difference)/expected);
+    }
+
+    return chi2;
+}
 

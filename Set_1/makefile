@@ -11,7 +11,7 @@ MY_SRC=../src
 # compiler flags
 # -g 	include debugging information
 # -Wall throw all (maybe all) compiler warnings 
-CFLAGS=-g -Wall Werror -I$(MY_INC) -I$(OPENSSL_INC)
+CFLAGS=-g -Wall -Werror -I$(MY_INC) -I$(OPENSSL_INC)
 LDFLAGS=-lcrypto
 
 
