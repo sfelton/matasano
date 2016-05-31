@@ -62,11 +62,16 @@ int repeated_xor( unsigned char* ANS,
  */
 
 //http://crypto.stackexchange.com/questions/30209/developing-algorithm-for-detecting-plain-text-via-frequency-analysis
-float score_letter_frequency(char* string){
+float score_letter_frequency(char* string, size_t string_length) {
+    //Check that strlen matches string_length, it is possible to have a null
+    //  byte in the middle of a decrypted string that can throw off resulst
+    if (string_length != strlen(string)) return FLT_MAX;
+
     //Get a count of all the letters
     unsigned int num_letters = 0;
+    unsigned int ignored = 0;
     unsigned int letter_count[26] = {0};
-    for (unsigned int i=0; i < strlen(string); ++i){
+    for (unsigned int i=0; i < string_length; ++i){
         char c = string[i];
         if (c >= 'a' && c <= 'z') {
             letter_count[c-97]++;
@@ -76,12 +81,15 @@ float score_letter_frequency(char* string){
             letter_count[c-65]++;
             num_letters++;
         }
+        else if (c >= ' ' && c <= '~') ignored++;
+        else if (c == 9 || c == 10 || c == 13 ) ignored++;
+        else return FLT_MAX;
     }
 
     //Do chi squared test to generate score
     float chi2 = 0;
     for (unsigned int i = 0; i < 26; ++i) {
-        float expected = english_letter_frequency[i]*strlen(string);
+        float expected = english_letter_frequency[i]*num_letters;
         float difference = expected-letter_count[i];
         if (expected != 0) chi2 += (float)((difference*difference)/expected);
     }

@@ -1,6 +1,5 @@
 #include "decode_encode.h"
 #include "crypto_lib.h"
-#include <float.h>
 
 char* encrypted_string = "1b37373331363f78151b7f2b783431333d"
                          "78397828372d363c78373e783a393b3736";
@@ -31,22 +30,21 @@ int main(int argc, char* argv[]) {
     unsigned char* lowest_score_result = malloc(buf_size);
     for (unsigned int i = 0; i < 256; ++i) {
         repeated_xor(result, buf, buf_size, (unsigned char *)&i, 1);
-        float score = score_letter_frequency((char *)result);
+        float score = score_letter_frequency((char *)result, buf_size);
         char* xored_string = encode_hex(result, buf_size);
         if (score != 0 && score < lowest_score) {
             lowest_score = score;
             lowest_score_key = i;
-            lowest_score_result = result;
+            memcpy(lowest_score_result, result, buf_size);
 //            printf("%02x: %s - %f\n", i, xored_string, score);
 //            printf("%s\n", (char *)result );
         }
         free(xored_string);
     }
-    printf("Key = %02x with score %f\n", lowest_score_key, lowest_score);
+    printf("Key = 0x%02x (%c) with score %f\n", lowest_score_key, lowest_score_key, lowest_score);
     printf("%s\n", lowest_score_result);
 
     free(lowest_score_result);
-
     free(result);
     free(buf);
 

@@ -6,7 +6,7 @@ The matasano crypto challenges found at [cryptopals.com](https://cryptopals.com)
 |----|------------------------------|-----------|
 | 1  | Convert hex to base64        |  5/23/16  | 
 | 2  | Fixed XOR                    |  5/23/16  |
-| 3  | Single-byte XOR cipher       |           |
+| 3  | Single-byte XOR cipher       |  5/31/16  |
 | 4  | Detect single-character XOR  |           |
 | 5  | Implement repeating-key XOR  |           |
 | 6  | Break repeating-key XOR      |           |

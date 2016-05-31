@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <float.h>
 
 int balanced_xor( unsigned char* ANS,
                   unsigned char* LHS,
@@ -15,7 +16,7 @@ int repeated_xor( unsigned char* ANS,
                    unsigned char* RHS,
                    size_t RHS_length);
 
-float score_letter_frequency(char* string);
+float score_letter_frequency(char* string, size_t string_length);
 
 
 
