@@ -31,7 +31,7 @@ int main(int argc, char* argv[]) {
         //Remove newline at end if neccessary
         line = strsep(&line, "\n");
 
-        printf("%zu: %s\n", strlen(line), line);
+//        printf("%zu: %s\n", strlen(line), line);
 
         //Decode the hex string into memory
         size_t buf_size = strlen(line)/2;

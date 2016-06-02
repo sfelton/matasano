@@ -24,7 +24,7 @@ OBJECTS=crypto_lib.o decode_encode.o
 all: $(EXECS)
 
 ######## MAIN EXECUTABLES ########
-1: 1.c $(OBJECTS)
+1: 1.c decode_encode.o 
 	$(CC) $(CFLAGS) $(LDFLAGS) $^ -o $@
 
 2: 2.c $(OBJECTS)
