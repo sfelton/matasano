@@ -47,7 +47,7 @@ char* encode_base64(unsigned char* data, size_t length) {
 char* encode_hex(unsigned char* data, size_t length) {
     char* final = malloc((length*2)+1);
     for (size_t i = 0; i < length; ++i) {
-        sprintf(final+(i*2), "%02X", *(data+i));
+        sprintf(final+(i*2), "%02x", *(data+i));
     }
     *(final+(length*2)) = '\0';
     return final;

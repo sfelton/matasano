@@ -8,7 +8,7 @@ The matasano crypto challenges found at [cryptopals.com](https://cryptopals.com)
 | 2  | Fixed XOR                    |  5/23/16  |
 | 3  | Single-byte XOR cipher       |  5/31/16  |
 | 4  | Detect single-character XOR  |  6/02/16\*|
-| 5  | Implement repeating-key XOR  |           |
+| 5  | Implement repeating-key XOR  |  6/03/16  |
 | 6  | Break repeating-key XOR      |           |
 | 7  | AES in ECB mode              |           |
 | 8  | Detect AES in ECB mode       |           |
