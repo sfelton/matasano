@@ -4,7 +4,7 @@
  * DECODE METHODS
  */
 
-int decode_hex(unsigned char* output_hex, char* input_string) {
+int decode_hex(unsigned char* output_data, char* input_string) {
     // Length of hex string must be even
     if (strlen(input_string) % 2 != 0) {
         printf("ERROR decode_hex: string length not valid\n");
@@ -13,12 +13,34 @@ int decode_hex(unsigned char* output_hex, char* input_string) {
 
     int byte_count =0;
     for(unsigned int pos = 0; pos < strlen(input_string)/2; pos++) {
-        sscanf(input_string+(pos*2), "%2hhx", output_hex+pos);
+        sscanf(input_string+(pos*2), "%2hhx", output_data+pos);
         byte_count++;
     }
     return byte_count;
 }
 
+int decode_base64(unsigned char** output_data, char* input_string){
+    BIO *b64, *bmem;
+
+    size_t data_length = get_base64_decoded_length(input_string);
+    *output_data = malloc(data_length);
+//    *output_data[data_length] = '\0';
+
+    bmem = BIO_new_mem_buf(input_string, -1);
+    b64  = BIO_new(BIO_f_base64());
+
+    bmem = BIO_push(b64, bmem);
+
+    BIO_set_flags(bmem, BIO_FLAGS_BASE64_NO_NL);
+    BIO_read(bmem, *output_data, strlen(input_string));
+    BIO_flush(bmem);
+    BIO_set_close(bmem, BIO_NOCLOSE);
+    BIO_free_all(bmem);
+
+    printf("DEBUG: %p: %s\n", *output_data, *output_data);
+
+    return 0;
+}
 
 /*
  * ENCODE METHOS
@@ -51,4 +73,18 @@ char* encode_hex(unsigned char* data, size_t length) {
     }
     *(final+(length*2)) = '\0';
     return final;
+}
+
+
+/*
+ * HELPER METHODS
+ */
+
+size_t get_base64_decoded_length(const char* input){
+    size_t length = strlen(input);
+    size_t padding = 0;
+    if (input[length-1] == '=' && input[length-2] == '=') padding = 2;
+    else if (input[length-1] == '=') padding = 1;
+
+    return ((length*3)/4)-padding;
 }

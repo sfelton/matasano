@@ -1,11 +1,5 @@
 #include "crypto_lib.h"
 
-float english_letter_frequency[26] =
-{ 0.08167, 0.01492, 0.02782, 0.04253, 0.12702, 0.02228, 0.02015,  // A-G
-  0.06094, 0.06966, 0.00153, 0.00772, 0.04025, 0.02406, 0.06749,  // H-N
-  0.07507, 0.01929, 0.00095, 0.05987, 0.06327, 0.09056, 0.02758,  // O-U
-  0.00978, 0.02361, 0.00150, 0.01974, 0.00074, };                 // V-Z
-
 
 /*
  * XOR METHODS
@@ -64,7 +58,7 @@ int repeated_xor(  unsigned char* ANS,
 }
 
 /*
- * FREQUENCY ANALYSIS
+ * ANALYSIS
  */
 
 //http://crypto.stackexchange.com/questions/30209/developing-algorithm-for-detecting-plain-text-via-frequency-analysis
@@ -103,5 +97,20 @@ float score_letter_frequency(char* string, size_t string_length) {
     }
 
     return chi2;
+}
+
+ssize_t hamming_distance(unsigned char* LHS, unsigned char* RHS, size_t size){
+
+    //Operating under the assumption that LHS and RHS are the same size
+
+    unsigned char* xored = malloc(size);
+    balanced_xor(xored, LHS, RHS, size);
+    int total = 0;
+    for (unsigned int i = 0; i < size; ++i){
+       total += hamming_weight[(int)*(xored+i)];
+    }
+
+    free(xored);
+    return total;
 }
 
