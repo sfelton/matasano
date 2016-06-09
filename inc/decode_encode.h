@@ -12,6 +12,7 @@
 //Decode Methods
 int decode_hex(unsigned char* output_data, char* input_string);
 int decode_base64(unsigned char** output_data, char* input_string);
+int decode_base64_from_file(unsigned char** output_data, char* file_name);
 
 //Encode Methods
 char* encode_base64(unsigned char* data, size_t length);

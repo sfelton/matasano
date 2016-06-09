@@ -24,7 +24,6 @@ int decode_base64(unsigned char** output_data, char* input_string){
 
     size_t data_length = get_base64_decoded_length(input_string);
     *output_data = malloc(data_length);
-//    *output_data[data_length] = '\0';
 
     bmem = BIO_new_mem_buf(input_string, -1);
     b64  = BIO_new(BIO_f_base64());
@@ -33,11 +32,31 @@ int decode_base64(unsigned char** output_data, char* input_string){
 
     BIO_set_flags(bmem, BIO_FLAGS_BASE64_NO_NL);
     BIO_read(bmem, *output_data, strlen(input_string));
-    BIO_flush(bmem);
+ //   BIO_flush(bmem);
     BIO_set_close(bmem, BIO_NOCLOSE);
     BIO_free_all(bmem);
 
-    printf("DEBUG: %p: %s\n", *output_data, *output_data);
+//    printf("DEBUG: %p: %s\n", *output_data, *output_data);
+
+    return 0;
+}
+
+int decode_base64_from_file(unsigned char** output_data, char* file_name){
+/*
+ * NOT IMPLIMENTED YET
+ *
+    BIO *b64, *bfile;
+    
+    b64 = BIO_new(BIO_f_base64());
+    bfile = BIO_new_file(file_name, "rb");
+
+    if (!bfile) {
+        printf("ERROR: Cannot open file, %s\n", file_name);
+        return -1;
+    }
+
+    bfile = BIO_push(b64, bfile);
+ */
 
     return 0;
 }
