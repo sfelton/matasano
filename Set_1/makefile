@@ -17,7 +17,7 @@ LDFLAGS=-lcrypto
 
 RM=rm -rf
 
-EXECS=1 2 3 4 5 6 7
+EXECS=1 2 3 4 5 6 7 8
 OBJECTS=crypto_lib.o decode_encode.o
 
 # Executables are just the problem number
@@ -43,6 +43,9 @@ all: $(EXECS)
 	$(CC) $(CFLAGS) $(LDFLAGS) $^ -o $@
 
 7: 7.c $(OBJECTS)
+	$(CC) $(CFLAGS) $(LDFLAGS) $^ -o $@
+
+8: 8.c $(OBJECTS)
 	$(CC) $(CFLAGS) $(LDFLAGS) $^ -o $@
 ######## OBJECTS ########
 %.o: $(MY_SRC)/%.c $(MY_INC)/%.h
