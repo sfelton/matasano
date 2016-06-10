@@ -99,6 +99,21 @@ float score_letter_frequency(char* string, size_t string_length) {
     return chi2;
 }
 
+float score_letter_frequency_adams_way(char* string, size_t string_length) {
+    float score = 0; 
+
+    for (unsigned int i=0; i < string_length; ++i){
+        char c = string[i];
+        if (c >= 'a' && c <= 'z') score += english_letter_frequency[c-97];
+        else if (c >= 'A' && c <= 'Z') score += english_letter_frequency[c-65];
+        else if (c >= ' ' && c <= '~');
+        else if (c == 9 || c == 10 || c == 13 );
+        else score -= 0.5;
+        
+    }
+    return score;
+}
+
 ssize_t hamming_distance(unsigned char* LHS, unsigned char* RHS, size_t size){
 
     //Operating under the assumption that LHS and RHS are the same size

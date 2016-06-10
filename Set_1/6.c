@@ -98,21 +98,29 @@ int main(int argc, char* argv[]){
         }
 
         //Find single byte key for transposed block
-        float lowest_score = FLT_MAX;
+        float lowest_score = 0;
+        float second_lowest_score = 0;
         unsigned int lowest_score_key = 256;
+        unsigned int second_lowest_score_key = 256;
         unsigned char* result = malloc(tb_size);
         for (unsigned int k = 0; k < 256; ++k){
             repeated_xor( result, 
                           transposed_block, tb_size, 
                           (unsigned char *)&k, 1);
-            float score = score_letter_frequency((char *)result, tb_size);
-            if (score != 0 && score < lowest_score){
+            float score = score_letter_frequency_adams_way((char *)result, tb_size);
+            if (score != 0 && score > lowest_score){
+                second_lowest_score = lowest_score;
+                second_lowest_score_key = lowest_score_key;
                 lowest_score = score;
                 lowest_score_key = k;
             }
         }
         memcpy(key+i,&lowest_score_key,1);
         printf("INDEX %2d: %3d (%c)\n", i, lowest_score_key, lowest_score_key);
+//        printf("LOWEST: %c - %f  SECOND LOWEST: %c - %f\n",
+//                lowest_score_key, lowest_score,
+//                second_lowest_score_key, second_lowest_score);
+
 
 
         free(result);

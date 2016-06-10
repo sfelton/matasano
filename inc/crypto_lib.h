@@ -33,6 +33,7 @@ int repeated_xor( unsigned char* ANS,
                    size_t RHS_length);
 
 float score_letter_frequency(char* string, size_t string_length);
+float score_letter_frequency_adams_way(char* string, size_t string_length);
 
 ssize_t hamming_distance(unsigned char* LHS, unsigned char* RHS, size_t size);
 
