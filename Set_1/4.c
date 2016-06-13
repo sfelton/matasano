@@ -20,7 +20,7 @@ int main(int argc, char* argv[]) {
         return 1;
     }
     
-    float GL_lowest_score = FLT_MAX;
+    float GL_lowest_score = 0;
     ssize_t GL_line_num = -1;
     unsigned int GL_lowest_score_key = 256;
     unsigned char* GL_lowest_score_result = malloc(30);
@@ -39,14 +39,14 @@ int main(int argc, char* argv[]) {
         decode_hex(buf, line);
 
         //Score each possilbe single byte key
-        float lowest_score = FLT_MAX;
+        float lowest_score = 0;
         unsigned int lowest_score_key;
         unsigned char* lowest_score_result = malloc(buf_size);
         unsigned char* result = malloc(buf_size);
         for (unsigned int i = 0; i < 256; ++i){
             repeated_xor(result, buf, buf_size, (unsigned char *)&i, 1);
-            float score = score_letter_frequency((char *)result, buf_size);
-            if (score != 0 && score < lowest_score) {
+            float score = score_letter_frequency_adams_way((char *)result, buf_size);
+            if (score != 0 && score > lowest_score) {
                 lowest_score = score;
                 lowest_score_key = i;
                 memcpy(lowest_score_result, result, buf_size);
@@ -54,7 +54,7 @@ int main(int argc, char* argv[]) {
         }
 
         //Check if any scores are better than the previous ones
-        if (lowest_score < GL_lowest_score){
+        if (lowest_score > GL_lowest_score){
             GL_lowest_score = lowest_score;
             GL_lowest_score_key = lowest_score_key;
             memcpy(GL_lowest_score_result, lowest_score_result, buf_size);
