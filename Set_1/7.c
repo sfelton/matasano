@@ -1,4 +1,5 @@
 #include "decode_encode.h"
+#include "crypto_lib.h"
 
 char* encrypted_file = "files/7.txt";
 unsigned char KEY[] = "YELLOW SUBMARINE";
@@ -37,6 +38,10 @@ int main(int argc, char* argv[]){
     decode_base64(&data, file_b64);
 
     //Decrypt data
+    unsigned char* data_plain;
+    aes_128_ecb_decrypt(&data_plain, data, KEY, data_length);
+
+    /*
     int len;
     unsigned char* data_plain = malloc(data_length);
     EVP_CIPHER_CTX* ctx;
@@ -50,7 +55,12 @@ int main(int argc, char* argv[]){
 
 
     EVP_CIPHER_CTX_free(ctx);
+    */
+    printf("%s\n", data_plain);
+
+    free(line);
     free(data);
+    free(data_plain);
     free(file_b64);
     return 0;
 }

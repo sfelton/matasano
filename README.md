@@ -16,7 +16,7 @@ The matasano crypto challenges found at [cryptopals.com](https://cryptopals.com)
 ## Set 2: Block crypto
 | #  | Title                                  | Completed |
 |----|----------------------------------------|-----------|
-| 9  | Implement PKCS#7 padding               |           |
+| 9  | Implement PKCS#7 padding               |  6/14/16  |
 | 10 | Implement CBC Mode                     |           |
 | 11 | An ECB/CBC detection oracle            |           |
 | 12 | Byte-at-a-time ECB decryption (Simple) |           |

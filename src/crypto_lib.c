@@ -58,6 +58,28 @@ int repeated_xor(  unsigned char* ANS,
 }
 
 /*
+ * AES METHODS
+ */
+int aes_128_ecb_decrypt(unsigned char** plaintext,
+                        unsigned char* ciphertext,
+                        unsigned char* key,
+                        size_t ct_size)
+{
+    int len;
+    *plaintext = malloc(ct_size);
+    EVP_CIPHER_CTX* ctx;
+
+    ctx = EVP_CIPHER_CTX_new();
+    EVP_DecryptInit_ex(ctx, EVP_aes_128_ecb(), NULL, key, NULL);
+    EVP_DecryptUpdate(ctx, *plaintext, &len, ciphertext, ct_size);
+    EVP_DecryptFinal(ctx, *plaintext + len, &len);
+
+    EVP_CIPHER_CTX_free(ctx);
+
+    return 0;
+}
+
+/*
  * ANALYSIS
  */
 
