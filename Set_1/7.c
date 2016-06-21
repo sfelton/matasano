@@ -7,6 +7,7 @@ unsigned char KEY[] = "YELLOW SUBMARINE";
 int main(int argc, char* argv[]){
     printf("~~~~~~~~AES in ECB MODE~~~~~~~~\n");
 
+    /*
     //Read in file to memory
     char* file_b64;
     FILE* fp;
@@ -36,6 +37,10 @@ int main(int argc, char* argv[]){
     unsigned char* data;
     size_t data_length = get_base64_decoded_length(file_b64);
     decode_base64(&data, file_b64);
+    */
+
+    unsigned char* data;
+    size_t data_length = decode_base64_from_file(&data, encrypted_file);
 
     //Decrypt data
     unsigned char* data_plain;
@@ -58,9 +63,9 @@ int main(int argc, char* argv[]){
     */
     printf("%s\n", data_plain);
 
-    free(line);
+//    free(line);
     free(data);
     free(data_plain);
-    free(file_b64);
+//    free(file_b64);
     return 0;
 }

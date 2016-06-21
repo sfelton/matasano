@@ -17,14 +17,20 @@ LDFLAGS=-lcrypto
 
 RM=rm -rf
 
-EXECS=1
+EXECS=9 10 test
 OBJECTS=crypto_lib.o decode_encode.o
 
 # Executables are just the problem number
-all: $(EXECS)
+all: $(EXECS) 
 
 ######## MAIN EXECUTABLES ########
-1: 1.c  
+9: 9.c  
+	$(CC) $(CFLAGS) $(LDFLAGS) $^ -o $@
+
+10: 10.c $(OBJECTS)
+	$(CC) $(CFLAGS) $(LDFLAGS) $^ -o $@
+
+test: test.c $(OBJECTS)
 	$(CC) $(CFLAGS) $(LDFLAGS) $^ -o $@
 
 ######## OBJECTS ########

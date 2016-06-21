@@ -42,6 +42,17 @@ int aes_128_ecb_decrypt(unsigned char** plaintext,
                         unsigned char* key,
                         size_t ct_size);
 
+int aes_128_ecb_encrypt(unsigned char** ciphertext,
+                        unsigned char* plaintext,
+                        unsigned char* key,
+                        size_t pt_size);
+
+int aes_128_cbc_decrypt(unsigned char** plaintext,
+                        unsigned char* ciphertext,
+                        unsigned char* key,
+                        unsigned char* iv,
+                        size_t ct_size);
+
 //ANALYSIS METHODS
 float score_letter_frequency(char* string, size_t string_length);
 float score_letter_frequency_adams_way(char* string, size_t string_length);

@@ -76,7 +76,26 @@ int aes_128_ecb_decrypt(unsigned char** plaintext,
 
     EVP_CIPHER_CTX_free(ctx);
 
-    return 0;
+    return len;
+}
+
+int aes_128_ecb_encrypt(unsigned char** ciphertext,
+                        unsigned char* plaintext,
+                        unsigned char* key,
+                        size_t pt_size)
+{
+    int len;
+    *ciphertext = malloc(pt_size);
+    EVP_CIPHER_CTX* ctx;
+
+    ctx = EVP_CIPHER_CTX_new();
+    EVP_EncryptInit_ex(ctx, EVP_aes_128_ecb(), NULL, key, NULL);
+    EVP_EncryptUpdate(ctx, *ciphertext, &len, plaintext, pt_size);
+    EVP_EncryptFinal(ctx, *ciphertext + len, &len);
+
+    EVP_CIPHER_CTX_free(ctx);
+
+    return len;
 }
 
 /*

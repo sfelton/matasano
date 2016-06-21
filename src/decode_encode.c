@@ -1,5 +1,10 @@
 #include "decode_encode.h"
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <float.h>
+
 /*
  * DECODE METHODS
  */
@@ -42,23 +47,39 @@ int decode_base64(unsigned char** output_data, char* input_string){
 }
 
 int decode_base64_from_file(unsigned char** output_data, char* file_name){
-/*
- * NOT IMPLIMENTED YET
- *
-    BIO *b64, *bfile;
     
-    b64 = BIO_new(BIO_f_base64());
-    bfile = BIO_new_file(file_name, "rb");
-
-    if (!bfile) {
-        printf("ERROR: Cannot open file, %s\n", file_name);
+    //Read in file to memory
+    char* file_b64;
+    FILE* fp;
+    int file_length = 0;
+    fp = fopen(file_name, "r");
+    if (fp == NULL) {
+        printf("ERROR: Cannot open encrypted file, %s\n", file_name);
         return -1;
     }
 
-    bfile = BIO_push(b64, bfile);
- */
+    char* line = NULL;
+    ssize_t read;
+    size_t length;
+    while ((read = getline(&line, &length, fp)) != -1){
+        line = strsep(&line, "\n");
+        file_length += strlen(line);
+    }
+    fseek(fp, 0, SEEK_SET);
+    file_b64 = malloc(file_length);
+    while ((read = getline(&line, &length, fp)) != -1){
+        line = strsep(&line, "\n");
+        strcat(file_b64, line);
+    }
+    fclose(fp);
 
-    return 0;
+    //Decode base64
+    size_t data_length = get_base64_decoded_length(file_b64);
+    *output_data = malloc(data_length);
+    decode_base64(output_data, file_b64);
+
+    
+    return data_length;
 }
 
 /*
