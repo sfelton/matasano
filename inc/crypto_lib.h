@@ -8,6 +8,9 @@
 
 #include <openssl/evp.h>
 
+//Constants
+static const size_t AES_BLOCK_SIZE = 16;
+
 //Tables
 static const float english_letter_frequency[26] =
 { 0.08167, 0.01492, 0.02782, 0.04253, 0.12702, 0.02228, 0.02015,  // A-G
@@ -53,11 +56,18 @@ int aes_128_cbc_decrypt(unsigned char** plaintext,
                         unsigned char* iv,
                         size_t ct_size);
 
+int aes_128_cbc_encrypt(unsigned char** ciphertext,
+                        unsigned char* plaintext,
+                        unsigned char* key,
+                        unsigned char* iv,
+                        size_t pt_size);
 //ANALYSIS METHODS
 float score_letter_frequency(char* string, size_t string_length);
 float score_letter_frequency_adams_way(char* string, size_t string_length);
 ssize_t hamming_distance(unsigned char* LHS, unsigned char* RHS, size_t size);
 
+//HELPER & MISC METHODS
+int generate_random_key(unsigned char** key, size_t length);
 
 
 

@@ -66,17 +66,20 @@ int aes_128_ecb_decrypt(unsigned char** plaintext,
                         size_t ct_size)
 {
     int len;
+    int plain_len;
     *plaintext = malloc(ct_size);
     EVP_CIPHER_CTX* ctx;
 
     ctx = EVP_CIPHER_CTX_new();
     EVP_DecryptInit_ex(ctx, EVP_aes_128_ecb(), NULL, key, NULL);
     EVP_DecryptUpdate(ctx, *plaintext, &len, ciphertext, ct_size);
+    plain_len = len;
     EVP_DecryptFinal(ctx, *plaintext + len, &len);
+    plain_len += len;
 
     EVP_CIPHER_CTX_free(ctx);
 
-    return len;
+    return plain_len;
 }
 
 int aes_128_ecb_encrypt(unsigned char** ciphertext,
@@ -85,17 +88,20 @@ int aes_128_ecb_encrypt(unsigned char** ciphertext,
                         size_t pt_size)
 {
     int len;
+    int cipher_len;
     *ciphertext = malloc(pt_size);
     EVP_CIPHER_CTX* ctx;
 
     ctx = EVP_CIPHER_CTX_new();
     EVP_EncryptInit_ex(ctx, EVP_aes_128_ecb(), NULL, key, NULL);
     EVP_EncryptUpdate(ctx, *ciphertext, &len, plaintext, pt_size);
+    cipher_len = len;
     EVP_EncryptFinal(ctx, *ciphertext + len, &len);
+    cipher_len += len;
 
     EVP_CIPHER_CTX_free(ctx);
 
-    return len;
+    return cipher_len;
 }
 
 int aes_128_cbc_decrypt(unsigned char** plaintext,
@@ -105,23 +111,25 @@ int aes_128_cbc_decrypt(unsigned char** plaintext,
                         size_t ct_size)
 {
     //This method should basically just run xor and call ecb_decrypt
-    const size_t BLOCK_SIZE = 16;
     
+    //tdb == total decrypted bytes
+    size_t tdb = 0;
+
     *plaintext = malloc(ct_size);
-    unsigned char* decrypted_block = malloc(BLOCK_SIZE);
-    for ( int i = 0; i < ct_size; i += BLOCK_SIZE ) {
-        aes_128_ecb_decrypt(&decrypted_block, ciphertext + i, key, BLOCK_SIZE);
+    unsigned char* decrypted_block = malloc(AES_BLOCK_SIZE);
+    for ( int i = 0; i < ct_size; i += AES_BLOCK_SIZE ) {
+        tdb+=aes_128_ecb_decrypt(&decrypted_block,ciphertext+i,key,AES_BLOCK_SIZE);
         if (i != 0) {
             balanced_xor( *plaintext + i,
-                          decrypted_block, ciphertext + i - BLOCK_SIZE,
-                          BLOCK_SIZE);
+                          decrypted_block, ciphertext + i - AES_BLOCK_SIZE,
+                          AES_BLOCK_SIZE);
         } else {
-            balanced_xor(*plaintext+i,decrypted_block, iv, BLOCK_SIZE);
+            balanced_xor(*plaintext+i,decrypted_block, iv, AES_BLOCK_SIZE);
         }
     }
 
     free(decrypted_block);
-    return 0;
+    return tdb;
 }
 
 
