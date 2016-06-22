@@ -72,12 +72,13 @@ int decode_base64_from_file(unsigned char** output_data, char* file_name){
         strcat(file_b64, line);
     }
     fclose(fp);
+    free(line);
 
     //Decode base64
     size_t data_length = get_base64_decoded_length(file_b64);
-    *output_data = malloc(data_length);
     decode_base64(output_data, file_b64);
 
+    free(file_b64);
     
     return data_length;
 }

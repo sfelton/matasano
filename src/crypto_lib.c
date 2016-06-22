@@ -98,6 +98,33 @@ int aes_128_ecb_encrypt(unsigned char** ciphertext,
     return len;
 }
 
+int aes_128_cbc_decrypt(unsigned char** plaintext,
+                        unsigned char* ciphertext,
+                        unsigned char* key,
+                        unsigned char* iv,
+                        size_t ct_size)
+{
+    //This method should basically just run xor and call ecb_decrypt
+    const size_t BLOCK_SIZE = 16;
+    
+    *plaintext = malloc(ct_size);
+    unsigned char* decrypted_block = malloc(BLOCK_SIZE);
+    for ( int i = 0; i < ct_size; i += BLOCK_SIZE ) {
+        aes_128_ecb_decrypt(&decrypted_block, ciphertext + i, key, BLOCK_SIZE);
+        if (i != 0) {
+            balanced_xor( *plaintext + i,
+                          decrypted_block, ciphertext + i - BLOCK_SIZE,
+                          BLOCK_SIZE);
+        } else {
+            balanced_xor(*plaintext+i,decrypted_block, iv, BLOCK_SIZE);
+        }
+    }
+
+    free(decrypted_block);
+    return 0;
+}
+
+
 /*
  * ANALYSIS
  */
