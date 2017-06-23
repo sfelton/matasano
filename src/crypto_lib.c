@@ -58,12 +58,12 @@ int repeated_xor(  unsigned char* ANS,
 }
 
 /*
- * AES METHODS
+ * BLOCK CIPHERS
  */
-int aes_128_ecb_decrypt(unsigned char** plaintext,
-                        unsigned char* ciphertext,
-                        unsigned char* key,
-                        size_t ct_size)
+int ecb_128_decrypt(unsigned char** plaintext,
+                    unsigned char* ciphertext,
+                    unsigned char* key,
+                    size_t ct_size)
 {
     int len;
     int plain_len;
@@ -82,10 +82,10 @@ int aes_128_ecb_decrypt(unsigned char** plaintext,
     return plain_len;
 }
 
-int aes_128_ecb_encrypt(unsigned char** ciphertext,
-                        unsigned char* plaintext,
-                        unsigned char* key,
-                        size_t pt_size)
+int ecb_128_encrypt(unsigned char** ciphertext,
+                    unsigned char* plaintext,
+                    unsigned char* key,
+                    size_t pt_size)
 {
     int len;
     int cipher_len;
@@ -104,21 +104,18 @@ int aes_128_ecb_encrypt(unsigned char** ciphertext,
     return cipher_len;
 }
 
-int aes_128_cbc_decrypt(unsigned char** plaintext,
-                        unsigned char* ciphertext,
-                        unsigned char* key,
-                        unsigned char* iv,
-                        size_t ct_size)
+int cbc_128_decrypt(unsigned char** plaintext,
+                    unsigned char* ciphertext,
+                    unsigned char* key,
+                    unsigned char* iv,
+                    size_t ct_size)
 {
     //This method should basically just run xor and call ecb_decrypt
     
-    //tdb == total decrypted bytes
-    size_t tdb = 0;
-
     *plaintext = malloc(ct_size);
-    unsigned char* decrypted_block = malloc(AES_BLOCK_SIZE);
     for ( int i = 0; i < ct_size; i += AES_BLOCK_SIZE ) {
-        tdb+=aes_128_ecb_decrypt(&decrypted_block,ciphertext+i,key,AES_BLOCK_SIZE);
+        unsigned char* decrypted_block;
+        ecb_128_decrypt(&decrypted_block,ciphertext+i,key,AES_BLOCK_SIZE);
         if (i != 0) {
             balanced_xor( *plaintext + i,
                           decrypted_block, ciphertext + i - AES_BLOCK_SIZE,
@@ -126,12 +123,43 @@ int aes_128_cbc_decrypt(unsigned char** plaintext,
         } else {
             balanced_xor(*plaintext+i,decrypted_block, iv, AES_BLOCK_SIZE);
         }
+        free(decrypted_block);
     }
 
-    free(decrypted_block);
-    return tdb;
+    return 0;
 }
 
+int cbc_128_encrypt(unsigned char** ciphertext,
+                    unsigned char* plaintext,
+                    unsigned char* key,
+                    unsigned char* iv,
+                    size_t pt_size) {
+
+//    int encrypted_bytes = 0;
+
+    *ciphertext = malloc(pt_size);
+    for (int i = 0; i < pt_size; i += AES_BLOCK_SIZE) {
+        unsigned char* xored_block = malloc(AES_BLOCK_SIZE);
+        if (i != 0) {
+            balanced_xor( xored_block,
+                          *ciphertext + i - AES_BLOCK_SIZE, plaintext + i,
+                          AES_BLOCK_SIZE);
+        } else {
+            balanced_xor(xored_block,iv,plaintext+i, AES_BLOCK_SIZE);
+        }
+        
+        unsigned char* encrypted_block;
+        ecb_128_encrypt( &encrypted_block,xored_block,key,AES_BLOCK_SIZE);
+
+
+        free(encrypted_block);
+                                                
+        free(xored_block);
+    }
+
+
+    return 0;
+}
 
 /*
  * ANALYSIS

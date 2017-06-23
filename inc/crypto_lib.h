@@ -39,28 +39,29 @@ int repeated_xor( unsigned char* ANS,
                    unsigned char* RHS,
                    size_t RHS_length);
 
-//AES METHODS
-int aes_128_ecb_decrypt(unsigned char** plaintext,
-                        unsigned char* ciphertext,
-                        unsigned char* key,
-                        size_t ct_size);
+// Block Ciphers
+int ecb_128_decrypt(unsigned char** plaintext,
+                    unsigned char* ciphertext,
+                    unsigned char* key,
+                    size_t ct_size);
 
-int aes_128_ecb_encrypt(unsigned char** ciphertext,
-                        unsigned char* plaintext,
-                        unsigned char* key,
-                        size_t pt_size);
+int ecb_128_encrypt(unsigned char** ciphertext,
+                    unsigned char* plaintext,
+                    unsigned char* key,
+                    size_t pt_size);
 
-int aes_128_cbc_decrypt(unsigned char** plaintext,
-                        unsigned char* ciphertext,
-                        unsigned char* key,
-                        unsigned char* iv,
-                        size_t ct_size);
+int cbc_128_decrypt(unsigned char** plaintext,
+                    unsigned char* ciphertext,
+                    unsigned char* key,
+                    unsigned char* iv,
+                    size_t ct_size);
 
-int aes_128_cbc_encrypt(unsigned char** ciphertext,
-                        unsigned char* plaintext,
-                        unsigned char* key,
-                        unsigned char* iv,
-                        size_t pt_size);
+int cbc_128_encrypt(unsigned char** ciphertext,
+                    unsigned char* plaintext,
+                    unsigned char* key,
+                    unsigned char* iv,
+                    size_t pt_size);
+
 //ANALYSIS METHODS
 float score_letter_frequency(char* string, size_t string_length);
 float score_letter_frequency_adams_way(char* string, size_t string_length);

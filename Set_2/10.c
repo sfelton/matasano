@@ -20,7 +20,7 @@ int main(int arc, char* argv[]){
 
     //Decrypt the file in CBC mode
     unsigned char* plaintext;
-    aes_128_cbc_decrypt(&plaintext, ciphertext, KEY, IV, length);
+    cbc_128_decrypt(&plaintext, ciphertext, KEY, IV, length);
 
     printf("%s\n", plaintext);
 
