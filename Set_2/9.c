@@ -42,7 +42,8 @@ int main(int argc, char* argv[]){
 
     for(unsigned int i = 0; i < diff; i++) {
 //        printf("Printing at %d\n", original_length + i);
-        sscanf((char*)&diff, "%1s", output + (original_length + i));
+//        sscanf((char*)&diff, "%1s", output + (original_length + i));
+        sscanf((char*)&diff, "%c", output + (original_length + i));
     }
 
     output[padded_length] = '\0';
