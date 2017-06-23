@@ -23,6 +23,7 @@ unsigned char plain[] = "Two roads diverged in a yellow wood,\n"
                         "And that has made all the difference.";
 
 unsigned char key[] = "YELLOW SUBMARINE";
+unsigned char iv[]  = "0123456789abcdeF";
 
 int main(int argc, char* argv[]){
 
@@ -34,8 +35,8 @@ int main(int argc, char* argv[]){
     printf("%s\n", plain);
     printf("%lu\n", strlen((char*)plain));
 
-    length = aes_128_ecb_encrypt(&ciphertext, plain, key, strlen((char*)plain));
-    dec_len = aes_128_ecb_decrypt(&plaintext, ciphertext, key, length);
+    length = cbc_128_encrypt(&ciphertext, plain, key, iv, strlen((char*)plain));
+    dec_len = cbc_128_decrypt(&plaintext, ciphertext, key, iv, length);
     plaintext[dec_len] = '\0';
 
     printf("DEBUG: length = %d\n", length);
