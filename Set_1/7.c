@@ -44,7 +44,7 @@ int main(int argc, char* argv[]){
 
     //Decrypt data
     unsigned char* data_plain;
-    aes_128_ecb_decrypt(&data_plain, data, KEY, data_length);
+    ecb_128_decrypt(&data_plain, data, KEY, data_length);
 
     /*
     int len;
